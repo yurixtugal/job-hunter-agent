@@ -8,14 +8,15 @@ export async function POST(request: Request) {
 
         // Check authentication
         const {
-            data: { session },
-        } = await supabase.auth.getSession();
+            data: { user },
+            error: authError,
+        } = await supabase.auth.getUser();
 
-        if (!session) {
+        if (authError || !user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const userId = session.user.id;
+        const userId = user.id;
 
         // Parse form data
         const formData = await request.formData();
@@ -54,17 +55,15 @@ export async function POST(request: Request) {
             );
         }
 
-        // Get public URL (signed URL for private bucket)
-        const {
-            data: { publicUrl },
-        } = supabase.storage.from("resumes").getPublicUrl(storagePath);
+        // Store path instead of URL to avoid private bucket issues and expiration
+        const fileUrl = uploadData.path;
 
         // Create database record
         const { data: resumeData, error: dbError } = await supabase
             .from("resumes")
             .insert({
                 user_id: userId,
-                file_url: publicUrl,
+                file_url: fileUrl,
                 file_name: file.name,
                 file_size: file.size,
                 mime_type: file.type,

@@ -12,10 +12,11 @@ export default async function DashboardLayout({
 
     // Check authentication
     const {
-        data: { session },
-    } = await supabase.auth.getSession();
+        data: { user },
+        error: authError,
+    } = await supabase.auth.getUser();
 
-    if (!session) {
+    if (authError || !user) {
         redirect("/login");
     }
 
@@ -23,7 +24,7 @@ export default async function DashboardLayout({
     const { data: resume } = await supabase
         .from("resumes")
         .select("id")
-        .eq("user_id", session.user.id)
+        .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();

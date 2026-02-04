@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 
 export default async function LandingPage() {
   const supabase = await createClient()
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { user } } = await supabase.auth.getUser()
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -16,7 +16,7 @@ export default async function LandingPage() {
             <span className="text-xl font-bold">Job Hunter Agent</span>
           </div>
           <div className="flex gap-3">
-            {session ? (
+            {user ? (
               <Link href="/dashboard">
                 <Button>
                   Go to Dashboard
@@ -52,7 +52,7 @@ export default async function LandingPage() {
           </p>
 
           <div className="flex gap-4 justify-center">
-            {session ? (
+            {user ? (
               <Link href="/dashboard">
                 <Button size="lg" className="px-8">
                   Continue to Dashboard
