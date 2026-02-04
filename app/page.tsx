@@ -1,8 +1,11 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Target } from 'lucide-react'
+import { createClient } from '@/lib/supabase/server'
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const supabase = await createClient()
+  const { data: { session } } = await supabase.auth.getSession()
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -13,16 +16,26 @@ export default function LandingPage() {
             <span className="text-xl font-bold">Job Hunter Agent</span>
           </div>
           <div className="flex gap-3">
-            <Link href="/sign-in">
-              <Button variant="ghost">
-                Sign In
-              </Button>
-            </Link>
-            <Link href="/sign-up">
-              <Button>
-                Get Started
-              </Button>
-            </Link>
+            {session ? (
+              <Link href="/dashboard">
+                <Button>
+                  Go to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/sign-in">
+                  <Button variant="ghost">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/sign-up">
+                  <Button>
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -39,16 +52,26 @@ export default function LandingPage() {
           </p>
 
           <div className="flex gap-4 justify-center">
-            <Link href="/sign-up">
-              <Button size="lg">
-                Start Hunting Jobs
-              </Button>
-            </Link>
-            <Link href="/sign-in">
-              <Button size="lg" variant="outline">
-                Sign In
-              </Button>
-            </Link>
+            {session ? (
+              <Link href="/dashboard">
+                <Button size="lg" className="px-8">
+                  Continue to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/sign-up">
+                  <Button size="lg">
+                    Start Hunting Jobs
+                  </Button>
+                </Link>
+                <Link href="/sign-in">
+                  <Button size="lg" variant="outline">
+                    Sign In
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
 
