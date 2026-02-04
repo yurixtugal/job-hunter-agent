@@ -1,7 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Target } from 'lucide-react'
+import { Target, Upload, FileText } from 'lucide-react'
 import { LogoutButton } from '@/components/logout-button'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
 
 export default async function DashboardPage() {
     const supabase = await createClient()
@@ -35,12 +38,33 @@ export default async function DashboardPage() {
                         </p>
                     </div>
 
-                    <div className="border rounded-lg p-8 text-center space-y-4">
-                        <h2 className="text-2xl font-semibold">Dashboard Coming Soon</h2>
-                        <p className="text-muted-foreground">
-                            This is where you'll manage your resume, track applications, and chat with your AI agent.
-                        </p>
-                    </div>
+                    <Card className="border-2 hover:shadow-lg transition-shadow">
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <div className="p-3 bg-primary/10 rounded-lg">
+                                    <FileText className="w-6 h-6 text-primary" />
+                                </div>
+                                <div>
+                                    <CardTitle className="text-2xl">Upload Your Resume</CardTitle>
+                                    <CardDescription className="text-base">
+                                        Let AI extract your experience automatically
+                                    </CardDescription>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <p className="text-muted-foreground">
+                                Upload your CV in PDF or DOCX format and our AI will parse your work experience,
+                                education, and skills to help you land your dream job.
+                            </p>
+                            <Link href="/upload-resume">
+                                <Button size="lg" className="w-full">
+                                    <Upload className="w-4 h-4 mr-2" />
+                                    Upload Resume
+                                </Button>
+                            </Link>
+                        </CardContent>
+                    </Card>
                 </div>
             </main>
         </div>
