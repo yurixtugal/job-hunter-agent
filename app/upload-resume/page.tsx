@@ -127,7 +127,7 @@ export default function UploadResumePage() {
                                     Resume File
                                 </CardTitle>
                                 <CardDescription>
-                                    Supported formats: PDF, DOCX (Max 5MB)
+                                    Supported formats: PDF (Max 5MB)
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
@@ -155,7 +155,7 @@ export default function UploadResumePage() {
                                         <input
                                             id="file-upload"
                                             type="file"
-                                            accept=".pdf,.docx"
+                                            accept=".pdf"
                                             onChange={handleFileChange}
                                             className="hidden"
                                         />

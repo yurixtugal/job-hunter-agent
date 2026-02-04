@@ -3,7 +3,6 @@ import { z } from "zod";
 // Allowed file types
 const ALLOWED_FILE_TYPES = [
     "application/pdf",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
 ] as const;
 
 // Max file size: 5MB
@@ -16,7 +15,7 @@ export const resumeUploadSchema = z.object({
             message: "File size must be less than 5MB",
         })
         .refine((file) => ALLOWED_FILE_TYPES.includes(file.type as any), {
-            message: "File must be a PDF or DOCX",
+            message: "File must be a PDF",
         }),
 });
 
