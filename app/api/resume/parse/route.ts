@@ -87,21 +87,12 @@ export async function POST(request: Request) {
                     const arrayBuffer = await response.arrayBuffer();
                     fileBuffer = Buffer.from(arrayBuffer);
                 } catch (fetchError) {
-                    // Log original error and return failure
                     console.error("Error fetching file (fallback):", fetchError);
-                    await supabase
-                        .from("resumes")
-                        .update({ parse_status: "FAILED", parse_error: `Download failed: ${downloadError.message}` })
-                        .eq("id", resumeId);
-                    return NextResponse.json({ error: "Failed to download resume file" }, { status: 500 });
+                    throw new Error("Failed to download resume file");
                 }
             } else {
                 console.error("Error downloading file:", downloadError);
-                await supabase
-                    .from("resumes")
-                    .update({ parse_status: "FAILED", parse_error: `Download failed: ${downloadError.message}` })
-                    .eq("id", resumeId);
-                return NextResponse.json({ error: "Failed to download resume file" }, { status: 500 });
+                throw new Error("Failed to download resume file");
             }
         }
 
